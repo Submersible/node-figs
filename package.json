@@ -1,0 +1,28 @@
+{
+  "name": "node-figs",
+  "version": "0.0.1",
+  "description": "Config inheritance & overriding",
+  "main": "index.js",
+  "bin": {
+    "figs": "./figs.js"
+  },
+  "scripts": {
+    "test": "tap test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Submersible/node-figs.git"
+  },
+  "author": "Ryan Munro <munro.github@gmail.com>",
+  "readmeFilename": "README.md",
+  "license": "BSD",
+  "dependencies": {
+    "merge-recursive": "0.0.3",
+    "lodash": "~0.10.0",
+    "optimist": "~0.3.5",
+    "colors": "~0.6.0-1"
+  },
+  "devDependencies": {
+    "tap": "~0.3.2"
+  }
+}
