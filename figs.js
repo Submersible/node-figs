@@ -19,7 +19,7 @@ var argv = optimist
     .describe('dir', 'shows ')
     .argv;
 
-var root = path.dirname(global.process.mainModule.filename),
+var root = process.cwd(),
     show_colors = true;
 
 if (argv.d) {
