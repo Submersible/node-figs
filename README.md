@@ -36,6 +36,8 @@ properties, because hey—sometimes a piece of functionality spans a few project
 {"hello": "world", "foo": "OVERRIDE"}
 ```
 
+----------
+
 ### Local config overriding
 
 We'll next load any `config.local.js` and `config.local.json` configs!
@@ -62,12 +64,16 @@ them to git.
 {"hello": "world", "foo": "LOAD ME"}
 ```
 
+----------
+
 ### Passed overriding config
 
 You can also load a config by setting CONFIG="/home/subc/ringer.io-override.js" in
 your environment before starting the Node.js process.
 
 This is useful for production, so we can specify production configurations.
+
+----------
 
 ### Passed overriding ENVs
 
