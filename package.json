@@ -15,7 +15,7 @@
   },
   "author": "Ryan Munro <munro.github@gmail.com>",
   "readmeFilename": "README.md",
-  "license": "BSD",
+  "license": "MIT",
   "dependencies": {
     "merge-recursive": "0.0.3",
     "lodash": "~0.10.0",
