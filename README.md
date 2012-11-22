@@ -2,7 +2,7 @@
 
 ## What is it?
 
-Provides config inheritances & overriding in a plethora of ways!
+Provides config inheritance & overriding in a plethora of ways!
 
 ## What ways are those?
 
