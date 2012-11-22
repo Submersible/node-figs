@@ -1,4 +1,4 @@
-# Figs—config management! [![Build Status](https://secure.travis-ci.org/munro/node-figs.png?branch=master)](http://travis-ci.org/munro/node-figs)
+# Figs—config management! [![Build Status](https://secure.travis-ci.org/Submersible/node-figs.png?branch=master)](http://travis-ci.org/Submersible/node-figs)
 
 ## What is it?
 
