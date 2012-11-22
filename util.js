@@ -102,6 +102,8 @@ util.envToObject = function (key, value) {
         value = true;
     } else if (value === 'false') {
         value = false;
+    } else if (!isNaN(Number(value))) {
+        value = Number(value);
     }
 
     parts.forEach(function (part, index) {
