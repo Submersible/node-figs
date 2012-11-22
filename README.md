@@ -68,7 +68,7 @@ them to git.
 
 ### Passed overriding config
 
-You can also load a config by setting CONFIG="/home/subc/ringer.io-override.js" in
+You can also load a config by setting `CONFIG="/home/subc/ringer.io-override.js"` in
 your environment before starting the Node.js process.
 
 This is useful for production, so we can specify production configurations.
