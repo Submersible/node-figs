@@ -18,7 +18,7 @@ var argv = optimist
     .describe('help', 'this message')
     .describe('stack', 'print all configs in the inheritance chain')
     .describe('full', 'full stack trace of all the configs')
-    .describe('dir', 'shows ')
+    .describe('dir', 'inspect from the specified directory')
     .argv;
 
 var root = process.cwd(),

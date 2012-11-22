@@ -2,7 +2,7 @@
 
 ## What is it?
 
-Provides config inheritences & overriding in a plethora of ways!
+Provides config inheritances & overriding in a plethora of ways!
 
 ## What ways are those?
 
@@ -98,6 +98,26 @@ CONFIG_debug="true"
 ```json
 {"domain": {"ringer_www": {"host": "dev.ringer.io.com"}},
  "debug": true}
+```
+
+## Command Line Inspector Tool
+
+To use the tool, install this library globally with NPM:
+
+```
+$ npm install -g figs
+```
+
+### Usage
+
+```
+Figs configuration inspector
+
+Options:
+  --help, -h   this message
+  --stack, -s  print all configs in the inheritance chain
+  --full, -f   full stack trace of all the configs
+  --dir, -d    inspect from the specified directory
 ```
 
 ## License
