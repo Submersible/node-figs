@@ -1,4 +1,4 @@
-/*jslint node: true, todo: true */
+/*jslint node: true, nomen: true */
 
 'use strict';
 

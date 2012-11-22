@@ -24,6 +24,13 @@ var argv = optimist
 var root = process.cwd(),
     show_colors = true;
 
+function color(str, c) {
+    if (show_colors) {
+        return str[c];
+    }
+    return str;
+}
+
 if (argv.d) {
     root = path.resolve(root, argv.d);
 }
@@ -33,43 +40,32 @@ var out = util.whereTheMagicHappens(root, process.env);
 if (argv.h) {
     optimist.showHelp();
 } else if (argv.s) {
-    console.log(show_colors ? '[Root]  '.magenta : '[Root]  ', root);
+    console.log(color('[Root]  ', 'magenta'));
 
     out.files.forEach(function (file) {
-        console.log(
-            show_colors ? '[Loaded]'.green : '[Loaded]',
-            file[0]
-        );
+        console.log(color('[Loaded]', 'green'), file[0]);
     });
 
     out.envs.forEach(function (env) {
-        console.log(
-            show_colors ? '[Env]   '.blue : '[Env]   ',
-            env[0]
-        );
+        console.log(color('[Env]   ', 'blue'), env[0]);
     });
 } else if (argv.f) {
-    console.log(show_colors ? '[Root]  '.magenta : '[Root]  ', root);
+    console.log(color('[Root]  ', 'magenta'));
 
     out.files.forEach(function (file) {
-        console.log(
-            show_colors ? '[Loaded]'.magenta : '[Loaded]',
-            file[0]
-        );
-        console.log(
-            nutil.inspect(file[1], true, null, show_colors) + '\n\n'
-        );
+        console.log(color('[Loaded]', 'magenta'), file[0]);
+        console.log(nutil.inspect(file[1], true, null, show_colors) + '\n\n');
     });
 
     out.envs.forEach(function (env) {
         console.log(
-            show_colors ? '[Env]   '.magenta : '[Env]   ',
+            color('[Env]   ', 'magenta'),
             env[0] + '=' + nutil.inspect(env[1], true, null, show_colors)
         );
     });
 
     console.log(
-        show_colors ? '[Output]'.blue : '[Output]',
+        color('[Output]', 'blue'),
         nutil.inspect(out.config, true, null, show_colors)
     );
 } else {

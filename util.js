@@ -1,4 +1,4 @@
-/*jslint node: true, nomen: true */
+/*jslint node: true, nomen: true, regexp: true, stupid: true */
 
 'use strict';
 
@@ -13,28 +13,30 @@ var util = {};
 var MATCH_ENV_NAME = /^CONFIG_.*$/;
 
 /**
+ * Find existing configs from root path.
+ * @param {String} root Root path
+ * @param {Array<String>} configs Files to find
+ * @return {Array<String>} Absolute files that exist
+ */
+util.findConfigs = function (path, configs) {
+    return util.possibleFiles(path, configs).filter(fs.existsSync);
+};
+
+/**
  * Build config from env & root directory
  * @param {String} root Root path
  * @param {HashMap<String, String>} env Environment variables
  * @param {Object} Config!
  */
 util.whereTheMagicHappens = function (root, env) {
-    function findConfigs(path, configs) {
-        return util.possibleFiles(path, configs).filter(fs.existsSync);
-    }
-
-    function loadParentConfigs(path, configs) {
-        return util.merge(findConfigs(path, configs).map(require));
-    }
-
     /* Load the configs */
     var files = [], envs = [];
 
     /* 1. By directory */
-    files = files.concat(findConfigs(root, ['config.js', 'config.json']));
+    files = files.concat(util.findConfigs(root, ['config.js', 'config.json']));
 
     /* 2. By directory */
-    files = files.concat(findConfigs(root, ['config.local.js', 'config.local.json']));
+    files = files.concat(util.findConfigs(root, ['config.local.js', 'config.local.json']));
 
     /* 3. Load passed in config */
     if (env.CONFIG && fs.existsSync(env.CONFIG)) {
@@ -60,7 +62,7 @@ util.whereTheMagicHappens = function (root, env) {
 };
 
 /**
- * Returns files mapped acrossed every parent directory.
+ * Returns files mapped across every parent directory.
  * @param {String} dir Root directory
  * @param {Array<String>} files Possible files
  * @return {Array<String>} All possible locations for the files
@@ -75,9 +77,7 @@ util.possibleFiles = function (dir, files) {
         files = [files];
     }
     while (true) {
-        paths = paths.concat(files.map(function (file) {
-            return path.join(dir, file);
-        }));
+        paths = paths.concat(files.map(_.partial(path.join, dir)));
         /* Can't go back anymore, we're done! */
         if (dir === '/') {
             break;
@@ -120,7 +120,7 @@ util.envToObject = function (key, value) {
  */
 util.envFilter = function (env) {
     return _.map(env, function (value, key) {
-        return [key, value]
+        return [key, value];
     }).filter(function (set) {
         return MATCH_ENV_NAME.test(set[0]);
     });
