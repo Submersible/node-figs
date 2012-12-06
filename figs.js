@@ -10,15 +10,18 @@ var path = require('path'),
     util = require('./util');
 
 var argv = optimist
-    .usage('Figs configuration inspector')
+    .usage('Use: figs [-opts] [directory]\n\n' +
+        'Arguments:\n' +
+        '  directory   inspect from the specified directory')
+    .boolean(['h', 'l', 'v', 'j'])
     .alias('h', 'help')
-    .alias('s', 'stack')
-    .alias('f', 'full')
-    .alias('d', 'dir')
+    .alias('l', 'list')
+    .alias('v', 'view')
+    .alias('j', 'json')
     .describe('help', 'this message')
-    .describe('stack', 'print all configs in the inheritance chain')
-    .describe('full', 'full stack trace of all the configs')
-    .describe('dir', 'inspect from the specified directory')
+    .describe('list', 'all configs in the inheritance chain')
+    .describe('view', 'full stack trace of all the configs & contents')
+    .describe('json', 'View the raw JSON')
     .argv;
 
 var root = process.cwd(),
@@ -31,16 +34,16 @@ function color(str, c) {
     return str;
 }
 
-if (argv.d) {
-    root = path.resolve(root, argv.d);
+if (argv._[0]) {
+    root = path.resolve(root, argv._[0]);
 }
 
 var out = util.whereTheMagicHappens(root, process.env);
 
 if (argv.h) {
     optimist.showHelp();
-} else if (argv.s) {
-    console.log(color('[Root]  ', 'magenta'));
+} else if (argv.l) {
+    console.log(color('[Root]  ', 'magenta'), root);
 
     out.files.forEach(function (file) {
         console.log(color('[Loaded]', 'green'), file[0]);
@@ -49,8 +52,8 @@ if (argv.h) {
     out.envs.forEach(function (env) {
         console.log(color('[Env]   ', 'blue'), env[0]);
     });
-} else if (argv.f) {
-    console.log(color('[Root]  ', 'magenta'));
+} else if (argv.v) {
+    console.log(color('[Root]  ', 'magenta'), root);
 
     out.files.forEach(function (file) {
         console.log(color('[Loaded]', 'magenta'), file[0]);
@@ -68,6 +71,8 @@ if (argv.h) {
         color('[Output]', 'blue'),
         nutil.inspect(out.config, true, null, show_colors)
     );
+} else if(argv.j) {
+    console.log(JSON.stringify(out.config));
 } else {
     console.log(nutil.inspect(out.config, true, null, show_colors));
 }

@@ -13,7 +13,7 @@
     "type": "git",
     "url": "https://github.com/Submersible/node-figs.git"
   },
-  "author": "Ryan Munro <munro.github@gmail.com>",
+  "author": "Ryan Munro <ryan@subc.io>",
   "readmeFilename": "README.md",
   "license": "MIT",
   "dependencies": {
@@ -23,6 +23,10 @@
     "colors": "~0.6.0-1"
   },
   "devDependencies": {
-    "tap": "~0.3.2"
+    "tap": "~0.3.2",
+    "browserify": "~1.16.5",
+    "express": "~3.0.3",
+    "request": "~2.12.0",
+    "connect": "~2.7.0"
   }
 }

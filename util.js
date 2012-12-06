@@ -13,6 +13,41 @@ var util = {};
 var MATCH_ENV_NAME = /^CONFIG_.*$/;
 
 /**
+ * Create a browserify plugin that mounts data to a path in the bundle.
+ * @param {String} mount Path to mount as in Browserify
+ * @param data Value to serialize into the browserify module
+ * @return {Function} Browserify middleware
+ */
+util.browserify = function (mount, data) {
+    return function (bundle) {
+        bundle.include(
+            path.join(mount),
+            undefined,
+            'module.exports = ' + JSON.stringify(data) + ';'
+        );
+    };
+};
+
+/**
+ * Wash an object with a whitelist to remove unwanted keys.
+ * @param {Object} obj Object to whitelist
+ * @param {Object} wash Wash the obj with this whitelist
+ * @return {Object} Whitelisted object
+ */
+util.whitelist = function (obj, wash) {
+    return (function whiteWash(obj, wash) {
+        return Object.keys(wash).reduce(function (acc, key) {
+            if (wash[key] === true) {
+                acc[key] = obj[key];
+            } else if (wash[key] instanceof Object) {
+                acc[key] = whiteWash(obj[key], wash[key]);
+            }
+            return acc;
+        }, {});
+    }(obj, wash));
+};
+
+/**
  * Find existing configs from root path.
  * @param {String} root Root path
  * @param {Array<String>} configs Files to find
@@ -32,11 +67,11 @@ util.whereTheMagicHappens = function (root, env) {
     /* Load the configs */
     var files = [], envs = [];
 
-    /* 1. By directory */
-    files = files.concat(util.findConfigs(root, ['config.js', 'config.json']));
+    /* 1. Inheritance */
+    files = files.concat(util.findConfigs(root, ['config.js', 'config.json', 'config.local.js', 'config.local.json']));
 
-    /* 2. By directory */
-    files = files.concat(util.findConfigs(root, ['config.local.js', 'config.local.json']));
+    /* 2. Clobbering */
+    files = files.concat(util.findConfigs(root, ['clobber.js', 'clobber.json']).reverse());
 
     /* 3. Load passed in config */
     if (env.CONFIG && fs.existsSync(env.CONFIG)) {
@@ -73,9 +108,13 @@ util.possibleFiles = function (dir, files) {
     if (dir !== path.resolve('/', dir)) {
         throw new Error('Must pass in an absolute path');
     }
-    if (!files instanceof Array) {
+    if (!(files instanceof Array)) {
         files = [files];
     }
+
+    /* Files at the end of the list take higher precedence */
+    files = files.reverse();
+
     while (true) {
         paths = paths.concat(files.map(_.partial(path.join, dir)));
         /* Can't go back anymore, we're done! */
@@ -126,6 +165,17 @@ util.envFilter = function (env) {
     });
 };
 
+/**
+ * Deal with messy calling of the merge function.
+ *
+ * @param {Array<Object} objs Array of objects to merge
+ * @return {Object} Merged objects
+ *
+ * @param {Object} obj noop
+ * @return {Object} noop
+ *
+ * @return {Object} noop
+ */
 util.merge = function (objs) {
     return merge.apply(undefined, [{}].concat(objs));
 };

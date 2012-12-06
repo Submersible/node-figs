@@ -10,30 +10,27 @@ First of all, I want to say overriding will MERGE objects, not clobber the old
 one with the new one.  Also, the following are listed from lowest precedence to
 highest.
 
-### Parent directory overriding
+### Config inheritance
 
-Well, first we start at your main module's directory, and begin looking for a
-`config.js` and `config.json`.  The parent will OVERRIDE child configs (relative
-to the folder structure).
+This will allow you to inherit & override configs in parent directories.
 
-This is useful if you want to share an overriding config between multiple
-properties, because hey—sometimes a piece of functionality spans a few projects.
+This is useful if you want to share a config between multiple projects.
 
 **For example:**
 
-**/home/subc/ringer.io/frontend/config.json**
-```json
-{"hello": "world", "foo": "bar"}
-```
-
 **/home/subc/ringer.io/config.json**
 ```json
-{"foo": "OVERRIDE"}
+{"foo": "base", "bar": "meow"}
+```
+
+**/home/subc/ringer.io/frontend/config.json**
+```json
+{"hello": "WORLD", "foo": "OVERRIDE"}
 ```
 
 **Result:**
 ```json
-{"hello": "world", "foo": "OVERRIDE"}
+{"hello": "WORLD", "foo": "OVERRIDE", "bar": "meow"}
 ```
 
 ----------
@@ -41,27 +38,53 @@ properties, because hey—sometimes a piece of functionality spans a few project
 ### Local config overriding
 
 We'll next load any `config.local.js` and `config.local.json` configs!
+Inheritance also works with these local configs too.
 
 This is useful if you want to override things in your repo without committing
-them to git.
+them.
 
 **/home/subc/ringer.io/frontend/config.json**
 ```json
-{"hello": "world", "foo": "bar"}
-```
-**/home/subc/ringer.io/frontend/config.local.json**
-```json
-{"foo": "LOAD ME"}
+{"foo": "bar"}
 ```
 
-**/home/subc/ringer.io/config.json**
+**/home/subc/ringer.io/frontend/config.local.json**
 ```json
 {"foo": "OVERRIDE"}
 ```
 
 **Result:**
 ```json
-{"hello": "world", "foo": "LOAD ME"}
+{"foo": "OVERRIDE"}
+```
+
+----------
+
+### Parent directory clobbering
+
+Finally, you can club children by creating a `config.js` or `config.json` in
+a parent directory.  This works in the exact opposite of the config inheritance,
+think of it as seniority.
+
+This is useful for when you're working on multiple projects, and you want to
+clobber all those mofos at once, and you're too lazy to use an environment
+variable.
+
+**For example:**
+
+**/home/subc/ringer.io/frontend/config.json**
+```json
+{"ringer_www_domain": "ringer.io"}
+```
+
+**/home/subc/clobber.json**
+```json
+{"ringer_www_domain": "localhost"}
+```
+
+**Result:**
+```json
+{"ringer_www_domain": "localhost"}
 ```
 
 ----------
@@ -100,7 +123,7 @@ CONFIG_debug="true"
  "debug": true}
 ```
 
-## Command Line Inspector Tool
+## Command line inspector tool
 
 To use the tool, install this library globally with NPM:
 
@@ -111,20 +134,67 @@ $ npm install -g figs
 ### Usage
 
 ```
-Figs configuration inspector
+Use: figs [-opts] [directory]
+
+Arguments:
+  directory   inspect from the specified directory
 
 Options:
-  --help, -h   this message
-  --stack, -s  print all configs in the inheritance chain
-  --full, -f   full stack trace of all the configs
-  --dir, -d    inspect from the specified directory
+  --help, -h  this message
+  --list, -l  all configs in the inheritance chain
+  --view, -v  full stack trace of all the configs & contents
+  --json, -j  View the raw JSON
 ```
+
+## Node.js Usage
+
+Require figs directly into your config variable.
+
+```javascript
+// config.js
+exports.debug = true;
+
+// app.js
+var config = require('figs');
+
+console.log('Are we in debug mode?', config.debug);
+```
+
+## Front-end Usage
+
+Simply pass the config object into browserify, and this will build the state of
+your config into your browserify bundle at the time of compilation.
+
+```javascript
+// bundling
+browserify.use(require('figs'));
+
+// front-end
+var config = require('figs');
+```
+
+You can also call `figs` with a whitelist.  This will wash your configuration
+to only include a subset of your configuration.  Because I'm sure you have
+secret keys in your config.
+
+```javascript
+browserify.use(require('figs')({domain: true, fb: {app_id: true, scope: true}}));
+```
+
+You can also use it from the browserify tool.
+
+```
+$ browserify --plugin figs
+```
+
+__If you use browserify from the command-line, please help me add the ability
+to pass in the whitelist!__
 
 ## License
 
 (The MIT License)
 
-Copyright (c) 2012 Ryan Munro &lt;ryan@ringer.io&gt;
+Copyright (c) 2012 Ryan Munro &lt;ryan@subc.io&gt;
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
