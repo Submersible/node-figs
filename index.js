@@ -14,7 +14,7 @@ var config = util.whereTheMagicHappens(
     process.env
 ).config;
 
-function browserify(bundle, b) {
+function figs(bundle, b) {
     var subset;
     /**
      * This is cheeky, but I'm attempting to detect if this was called by
@@ -28,4 +28,4 @@ function browserify(bundle, b) {
     return util.browserify('/node_modules/figs/index.js', subset);
 }
 
-module.exports(merge(browserify, config));
+module.exports = merge(figs, config);
