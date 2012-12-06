@@ -7,7 +7,10 @@ var path = require('path'),
     util = require('./util');
 
 var config = util.whereTheMagicHappens(
-    path.dirname(global.process.mainModule.filename),
+    path.dirname((
+        global.process.mainModule &&
+        global.process.mainModule.filename
+    ) || process.cwd()),
     process.env
 ).config;
 
