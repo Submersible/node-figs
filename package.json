@@ -1,6 +1,6 @@
 {
   "name": "figs",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Config inheritance & overriding",
   "main": "index.js",
   "bin": {
