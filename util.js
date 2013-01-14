@@ -68,7 +68,7 @@ util.whereTheMagicHappens = function (root, env) {
     var files = [], envs = [];
 
     /* 1. Inheritance */
-    files = files.concat(util.findConfigs(root, ['config.js', 'config.json', 'config.local.js', 'config.local.json']));
+    files = files.concat(util.findConfigs(root, ['config.local.js', 'config.local.json', 'config.js', 'config.json']));
 
     /* 2. Clobbering */
     files = files.concat(util.findConfigs(root, ['clobber.js', 'clobber.json']).reverse());
