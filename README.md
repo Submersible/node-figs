@@ -173,12 +173,27 @@ browserify.use(require('figs'));
 var config = require('figs');
 ```
 
-You can also call `figs` with a whitelist.  This will wash your configuration
+You can also call `figs` with an object to return a Browserify plugin mounting
+that as your config in the front end.  This will wash your configuration
 to only include a subset of your configuration.  Because I'm sure you have
 secret keys in your config.
 
 ```javascript
-browserify.use(require('figs')({domain: true, fb: {app_id: true, scope: true}}));
+var config = require('figs');
+
+var bundle = browserify({
+    // ...
+});
+
+bundle.use(config({
+    extra: 'config variables',
+    domain: config.domain,
+    fb: {
+        app_id: config.fb.app_id,
+        scope: config.fb.scope
+        // We don't want our `fb.secret` in our front end!
+    }
+}));
 ```
 
 You can also use it from the browserify tool.
@@ -186,9 +201,6 @@ You can also use it from the browserify tool.
 ```
 $ browserify --plugin figs
 ```
-
-__If you use browserify from the command-line, please help me add the ability
-to pass in the whitelist!__
 
 ## License
 

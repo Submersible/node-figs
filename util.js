@@ -29,25 +29,6 @@ util.browserify = function (mount, data) {
 };
 
 /**
- * Wash an object with a whitelist to remove unwanted keys.
- * @param {Object} obj Object to whitelist
- * @param {Object} wash Wash the obj with this whitelist
- * @return {Object} Whitelisted object
- */
-util.whitelist = function (obj, wash) {
-    return (function whiteWash(obj, wash) {
-        return Object.keys(wash).reduce(function (acc, key) {
-            if (wash[key] === true) {
-                acc[key] = obj[key];
-            } else if (wash[key] instanceof Object) {
-                acc[key] = whiteWash(obj[key], wash[key]);
-            }
-            return acc;
-        }, {});
-    }(obj, wash));
-};
-
-/**
  * Find existing configs from root path.
  * @param {String} root Root path
  * @param {Array<String>} configs Files to find

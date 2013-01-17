@@ -20,22 +20,6 @@ var FAKE_ENV = {
     _: '/home/ryan/.nvm/v0.8.14/bin/node'
 };
 
-test('whitelist', function (t) {
-    t.deepEqual(
-        util.whitelist({hello: 'meow', zz: 'nope'}, {hello: {world: true}}),
-        {hello: {world: undefined}}
-    );
-    t.deepEqual(
-        util.whitelist({hello: {world: 'meow', foo: 'bar'}, zz: 'nope'}, {hello: {world: true}}),
-        {hello: {world: 'meow'}}
-    );
-    t.deepEqual(
-        util.whitelist({hello: {world: 'meow', foo: 'bar'}, zz: 'nope'}, {}),
-        {}
-    );
-    t.end();
-});
-
 test('browserify', function (t) {
     var MATCH_CONFIG = /\/node_modules\/config\.js(.*)/,
         DATA = {hello: 'world'},

@@ -22,7 +22,7 @@ function figs(bundle, b) {
     if (bundle === b && bundle instanceof Function && bundle.wrap instanceof Function) {
         subset = config;
     } else {
-        subset = util.whitelist(config, bundle || {});
+        subset = bundle;
     }
     return util.browserify('/node_modules/figs/index.js', subset);
 }
