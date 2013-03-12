@@ -97,7 +97,9 @@ util.possibleFiles = function (dir, files) {
     files = files.reverse();
 
     while (true) {
-        paths = paths.concat(files.map(_.partial(path.join, dir)));
+        paths = paths.concat(files.map(function (file) {
+            return path.join(dir, file);
+        }));
         /* Can't go back anymore, we're done! */
         if (dir === '/') {
             break;
