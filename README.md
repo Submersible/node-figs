@@ -62,12 +62,12 @@ them.
 
 ### Parent directory clobbering
 
-Finally, you can club children by creating a `config.js` or `config.json` in
+Finally, you can club children!  To do so, create `clobber.js` or `clobber.json` in
 a parent directory.  This works in the exact opposite of the config inheritance,
 think of it as seniority.
 
 This is useful for when you're working on multiple projects, and you want to
-clobber all those mofos at once, and you're too lazy to use an environment
+clobber multiple projects at once, and you're too lazy to use an environment
 variable.
 
 **For example:**
