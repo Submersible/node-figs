@@ -112,9 +112,12 @@ Passing `true`, `false` will set booleans!  Otherwise it will set the string you
 
 **For example:**
 
+Export variables to your environment, and run the config inspector command `figs`.
+
 ```
-CONFIG_domain__ringer_www__host="dev.ringer.io.com"
-CONFIG_debug="true"
+$ export CONFIG_domain__ringer_www__host="dev.ringer.io.com"
+$ export CONFIG_debug="true"
+$ figs
 ```
 
 **Result:**
